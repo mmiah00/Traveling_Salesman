@@ -54,10 +54,10 @@ def solve (point_now):
                 if d < smallest_distance and d != 0:
                     closest_point = point
                     smallest_distance = d
-        print ("smallest distance: ", smallest_distance)
+        # print ("smallest distance: ", smallest_distance)
         #my_path.append (closest_point.num)
-        print ("path now: ", my_path)
-        print ()
+        # print ("path now: ", my_path)
+        # print ()
         if closest_point != None:
             my_length += smallest_distance
             solve (closest_point)
@@ -66,7 +66,10 @@ def solve (point_now):
             my_length += dist
 
 
-parser ("points.csv", "A12")
+parser ("points.csv", "A8")
 solve (points[0])
-print (my_length)
-print (my_path)
+print ("My Length\t", my_length)
+print ("Answer    ", best_length)
+print ()
+print ("My Path\t", my_path)
+print ("Answer    ", best_path)
