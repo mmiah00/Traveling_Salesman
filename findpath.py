@@ -2,8 +2,8 @@ import copy
 best_length = 0 #the answer for the shortest length
 best_path = [] #the answer for the order of points
 points = [] #all the points
-points_left = []
-my_path = []
+my_path = [] # path of numbers
+my_points_path = [] #path of point objects
 my_length = 0
 
 class point:
@@ -45,23 +45,28 @@ def solve (point_now):
         return
     else:
         my_path.append (point_now.num)
+        my_points_path.append (point_now)
         closest_point = None
         smallest_distance = float ('inf')
         for point in points:
-            if point.num != my_path:
+            if point.num not in my_path:
                 d = point_now.distance (point)
                 if d < smallest_distance and d != 0:
                     closest_point = point
                     smallest_distance = d
-        print ("Point now: ", point_now.num, "\tClosest: ", closest_point.num)
-        my_path.append (closest_point.num)
+        print ("smallest distance: ", smallest_distance)
+        #my_path.append (closest_point.num)
         print ("path now: ", my_path)
-        my_length += smallest_distance
-        solve (closest_point)
+        print ()
+        if closest_point != None:
+            my_length += smallest_distance
+            solve (closest_point)
+        else: #reached the end
+            dist = point_now.distance (my_points_path[0])
+            my_length += dist
 
-parser ("points.csv", "A4")
-points_left = copy.deepcopy (points)
-print (len (points_left))
+
+parser ("points.csv", "A12")
 solve (points[0])
 print (my_length)
 print (my_path)
