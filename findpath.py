@@ -47,10 +47,6 @@ def solve (point_now, my_length, my_path, my_points_path, all_points):
                 if d < smallest_distance and d != 0:
                     closest_point = point
                     smallest_distance = d
-        # print ("smallest distance: ", smallest_distance)
-        #my_path.append (closest_point.num)
-        # print ("path now: ", my_path)
-        # print ()
         if closest_point != None:
             my_length += smallest_distance
             solve (closest_point, my_length, my_path, my_points_path, all_points)
