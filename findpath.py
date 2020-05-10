@@ -25,6 +25,7 @@ def parser (file, points_set, b_len, b_path, pnts):
         elements = lines[i].split (",")
         if elements[0] == points_set:
             b_len = elements[1]
+            print ("Best Length: ", b_len)
             x_cors = lines[i + 1].split (",")
             y_cors = lines[i + 2].split (",")
             answer_path = lines[i + 3].split (",")
@@ -79,18 +80,49 @@ def cross_over (lists):
     i = max (r4, r3) + 1
     if i > len (path1) - 1:
         i = 0
+    #print("before: ", new_path)
     while None in new_points:
         adding = path2[i]
         if adding.num not in new_path:
             new_points[i] = adding
             new_path[i] = adding.num
-        if i == len (path1) - 1:
-            i = 0
+            if i == len (path1) - 1:
+                i = 0
+            else:
+                i += 1
         else:
-            i += 1
-    print (new_path)
+            if i == len (path1) - 1:
+                i = 0
+            else:
+                i += 1
+        #print ("i = ", i, "path: ", new_path)
+    #print (new_path)
     return new_points
 
+def mutate (path):
+    r = random.randint (1, 100)
+    if r < 5:
+        r1, r2 = 0, 0
+        while r1 == r2: #makes sure they dont produce the same number
+            r1 = random.randint (0, len (path) - 1)
+            r2 = random.randint (0, len (path) - 1)
+        one = path[r1]
+        another = path[r2]
+        path[r1] = another
+        path[r2] = one
+
+    # ans = []
+    # for point in path:
+    #     ans.append (point.num)
+    # print (ans)
+    dist = 0
+    for i in range (len (path)):
+        if i == len (path) - 1:
+            dist += path[i].distance(path[0])
+        else:
+            dist += path[i].distance(path[i + 1])
+    print ("My Length: ", dist, "\n\n\n")
+    return path
 
 def solve (point_now, my_length, my_path, my_points_path, all_points):
     if len (my_path) == len (all_points):
@@ -120,8 +152,9 @@ for name in all_sets:
     best_path = [] #the answer for the order of points
     points = [] #all the points
     parser ("points.csv", name, best_length, best_path, points)
-    a = random_gen (points, 5)
-    cross_over (a)
+    a = random_gen (points, 100)
+    b = cross_over (a)
+    mutate (b)
     # my_path = [] # path of numbers
     # my_points_path = [] #path of point objects
     # my_length = 0
