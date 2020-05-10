@@ -34,19 +34,27 @@ def parser (file, points_set, b_len, b_path, pnts):
                 points.append (adding)
     o.close()
 
-def random_gen (points, num_lists): #produces num_lists lists with random ordering of the points
-    ans = []
+def random_gen (points, num_lists): #produces a dictionary with num_lists items; key = distance || val = path
+    ans = {}
     for i in range (num_lists):
         adding = []
         nums = []
+        dist = 0
         while len (nums) < len (points):
             r = random.randint (0,len (points) - 1)
             if r not in nums:
                 nums.append (r)
+                if len (adding) != 0:
+                    dist += points[r].distance (adding[-1])
                 adding.append (points[r])
-        ans.append (adding)
-        #print (nums)
-    #print ()
+        dist += adding[-1].distance (adding[0])
+        #ans.append (adding)
+        ans[dist] = adding
+    #     print (nums)
+    #     print (dist)
+    # print ()
+    print (ans)
+    print ()
     return ans
 
 
@@ -78,7 +86,7 @@ for name in all_sets:
     best_path = [] #the answer for the order of points
     points = [] #all the points
     parser ("points.csv", name, best_length, best_path, points)
-    a = random_gen (points, 3)
+    a = random_gen (points, 5)
     # my_path = [] # path of numbers
     # my_points_path = [] #path of point objects
     # my_length = 0
