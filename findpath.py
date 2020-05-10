@@ -50,12 +50,46 @@ def random_gen (points, num_lists): #produces a dictionary with num_lists items;
         dist += adding[-1].distance (adding[0])
         #ans.append (adding)
         ans[dist] = adding
-    #     print (nums)
-    #     print (dist)
+    # print (ans)
     # print ()
-    print (ans)
-    print ()
     return ans
+
+def cross_over (lists):
+    keys = list (lists.keys ())
+    r1, r2  = 0, 0
+    while r1 == r2: #makes sure they dont produce the same number
+        r1 = random.randint (0, len (keys) - 1)
+        r2 = random.randint (0, len (keys) - 1)
+    path1 = lists[keys[r1]]
+    path2 = lists[keys[r2]]
+
+    new_points = [None for i in range (len (path1))] #path of point objects
+    new_path = [None for i in range (len (path1))] #list of the points' numbers
+    r3 = random.randint (0, len (path1) - 1)
+    if r3 != len(path1) - 1:
+        r4 = r3 + 1
+    else:
+        r4 = 0
+
+    new_points[r3] = path1[r3]
+    new_points[r4] = path1[r4]
+    new_path[r3] = path1[r3].num
+    new_path[r4] = path1[r4].num
+
+    i = max (r4, r3) + 1
+    if i > len (path1) - 1:
+        i = 0
+    while None in new_points:
+        adding = path2[i]
+        if adding.num not in new_path:
+            new_points[i] = adding
+            new_path[i] = adding.num
+        if i == len (path1) - 1:
+            i = 0
+        else:
+            i += 1
+    print (new_path)
+    return new_points
 
 
 def solve (point_now, my_length, my_path, my_points_path, all_points):
@@ -87,6 +121,7 @@ for name in all_sets:
     points = [] #all the points
     parser ("points.csv", name, best_length, best_path, points)
     a = random_gen (points, 5)
+    cross_over (a)
     # my_path = [] # path of numbers
     # my_points_path = [] #path of point objects
     # my_length = 0
