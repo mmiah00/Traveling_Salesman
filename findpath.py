@@ -1,4 +1,5 @@
 import copy
+import random
 set_name = ""
 
 class point:
@@ -33,6 +34,22 @@ def parser (file, points_set, b_len, b_path, pnts):
                 points.append (adding)
     o.close()
 
+def random_gen (points, num_lists): #produces num_lists lists with random ordering of the points
+    ans = []
+    for i in range (num_lists):
+        adding = []
+        nums = []
+        while len (nums) < len (points):
+            r = random.randint (0,len (points) - 1)
+            if r not in nums:
+                nums.append (r)
+                adding.append (points[r])
+        ans.append (adding)
+        #print (nums)
+    #print ()
+    return ans
+
+
 def solve (point_now, my_length, my_path, my_points_path, all_points):
     if len (my_path) == len (all_points):
         return
@@ -61,18 +78,18 @@ for name in all_sets:
     best_path = [] #the answer for the order of points
     points = [] #all the points
     parser ("points.csv", name, best_length, best_path, points)
-
-    my_path = [] # path of numbers
-    my_points_path = [] #path of point objects
-    my_length = 0
-    solve (points[0], my_length, my_path, my_points_path, points)
-    s = name + "\n"
-    for i in range (len (my_path)):
-        if i + 1 >= len (my_path):
-            s += (str (my_path[i]))
-        else:
-            s += (str (my_path[i]) + ",")
-    output.write (s + "\n\n")
+    a = random_gen (points, 3)
+    # my_path = [] # path of numbers
+    # my_points_path = [] #path of point objects
+    # my_length = 0
+    # solve (points[0], my_length, my_path, my_points_path, points)
+    # s = name + "\n"
+    # for i in range (len (my_path)):
+    #     if i + 1 >= len (my_path):
+    #         s += (str (my_path[i]))
+    #     else:
+    #         s += (str (my_path[i]) + ",")
+    # output.write (s + "\n\n")
 output.close ()
 
 ##### TESTING ONE BY ONE #####
