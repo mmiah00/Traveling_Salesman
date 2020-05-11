@@ -25,7 +25,7 @@ def parser (file, points_set, b_len, b_path, pnts):
         elements = lines[i].split (",")
         if elements[0] == points_set:
             b_len = elements[1]
-            print ("Best Length: ", b_len)
+            #print ("Best Length: ", b_len)
             x_cors = lines[i + 1].split (",")
             y_cors = lines[i + 2].split (",")
             answer_path = lines[i + 3].split (",")
@@ -114,26 +114,6 @@ def mutate (path):
     # for point in path:
     #     ans.append (point.num)
     # print (ans)
-
-# def genetic_solve (points, num_generations):
-#     if num_generations == 0:
-#         dist = 0
-#         for i in range (len (points)):
-#             if i == len (points) - 1:
-#                 dist += points[i].distance(points[0])
-#             else:
-#                 dist += points[i].distance(points[i + 1])
-#         dist += points[-1].distance (points[0])
-#         # print (dist)
-#         return points
-#     else:
-#         parent_gen = random_gen (points, 100)
-#         new_gen = [] #a list of paths with all the children
-#         for i in range (100):
-#             g = cross_over (parent_gen)
-#             mutate (g)
-#             new_gen.append (g)
-#             genetic_solve (g, num_generations - 1)
 def find_length (path):
     dist = 0
     for i in range (len(path)):
@@ -195,45 +175,28 @@ for name in all_sets:
     best_path = [] #the answer for the order of points
     points = [] #all the points
     parser ("points.csv", name, best_length, best_path, points)
-    ans = genetic_solve (points, 200)
 
-
-    s = name + "\n"
-    for i in range (len (ans)):
-        p = ans[i]
-        if i == len (ans) - 1:
-            s += str (p.num)
-        else:
-            s += str (p.num) + ","
-    output.write (s + "\n\n")
-
-    # my_path = [] # path of numbers
-    # my_points_path = [] #path of point objects
-    # my_length = 0
-    # solve (points[0], my_length, my_path, my_points_path, points)
+    ##### TESTING GENETIC SOLVE #####
+    # ans = genetic_solve (points, 200)
     # s = name + "\n"
-    # for i in range (len (my_path)):
-    #     if i + 1 >= len (my_path):
-    #         s += (str (my_path[i]))
+    # for i in range (len (ans)):
+    #     p = ans[i]
+    #     if i == len (ans) - 1:
+    #         s += str (p.num)
     #     else:
-    #         s += (str (my_path[i]) + ",")
+    #         s += str (p.num) + ","
     # output.write (s + "\n\n")
-output.close ()
+    ##### TESTING GENETIC SOLVE #####
 
-##### TESTING ONE BY ONE #####
-# parser ("points.csv", "A30")
-# solve (points[0])
-# output = open ("out.txt", "w")
-# s = set_name + "\n"
-# for i in range (len (my_path)):
-#     if i + 1 >= len (my_path):
-#         s += (str (my_path[i]))
-#     else:
-#         s += (str (my_path[i]) + ",")
-# output.write (s + "\n")
-# output.close ()
-# print ("First Solve Results\nMy Length\t", my_lengthgth)
-# print ("Answer    ", best_length)
-# print ("My Path\t", my_path)
-# print ("Answer    ", best_path)
-##### TO TEST FIRST SOLVER #####
+    my_path = [] # path of numbers
+    my_points_path = [] #path of point objects
+    my_length = 0
+    solve (points[0], my_length, my_path, my_points_path, points)
+    s = name + "\n"
+    for i in range (len (my_path)):
+        if i + 1 >= len (my_path):
+            s += (str (my_path[i]))
+        else:
+            s += (str (my_path[i]) + ",")
+    output.write (s + "\n\n")
+output.close ()
