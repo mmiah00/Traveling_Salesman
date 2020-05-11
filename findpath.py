@@ -147,7 +147,7 @@ def genetic_solve (points, num_generation):
     return best_path
 
 
-def solve (point_now, my_length, my_path, my_points_path, all_points):
+def solve (point_now, my_path, my_points_path, all_points):
     if len (my_path) == len (all_points):
         return
     else:
@@ -162,13 +162,10 @@ def solve (point_now, my_length, my_path, my_points_path, all_points):
                     closest_point = point
                     smallest_distance = d
         if closest_point != None:
-            my_length += smallest_distance
-            solve (closest_point, my_length, my_path, my_points_path, all_points)
+            solve (closest_point, my_path, my_points_path, all_points)
         else: #reached the end
-            dist = point_now.distance (my_points_path[0])
             my_points_path.append (my_points_path[0])
             my_path.append (my_points_path[0].num)
-            my_length += dist
 
 all_sets = ["A4", "A8", "A9", "A9-2", "A10", "A11", "A12", "A12-2", "A13", "A13-2", "A30", "A50"]
 output = open ("out.txt", "w")
@@ -195,13 +192,12 @@ for name in all_sets:
     for p in points:
         my_path = [] # path of numbers
         my_points_path = [] #path of point objects
-        my_length = 0
-        solve (p, my_length, my_path, my_points_path, points)
+        solve (p, my_path, my_points_path, points)
         l = find_length (my_points_path)
         if l < ans_len:
             ans_len = l
             ans_path = my_path
-    print (ans_len)
+    print (name,"\n", ans_len, "\n")
     s = name + "\n"
     for i in range (len (ans_path)):
         if i + 1 >= len (ans_path):
