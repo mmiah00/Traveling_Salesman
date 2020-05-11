@@ -25,7 +25,7 @@ def parser (file, points_set, b_len, b_path, pnts):
         elements = lines[i].split (",")
         if elements[0] == points_set:
             b_len = elements[1]
-            #print ("Best Length: ", b_len)
+            print ("Best Length: ", b_len)
             x_cors = lines[i + 1].split (",")
             y_cors = lines[i + 2].split (",")
             answer_path = lines[i + 3].split (",")
@@ -96,8 +96,6 @@ def cross_over (lists): #creates one child
                 i = 0
             else:
                 i += 1
-        #print ("i = ", i, "path: ", new_path)
-    #print (new_path)
     return new_points
 
 def mutate (path):
@@ -152,18 +150,21 @@ def genetic_solve (points, num_generation):
         for j in range (len (gen_now)): #makes a new generation
             g = cross_over (gen_now) #makes one child
             mutate (g)
-            score = 1 / find_length (g)
+            #score = 1 / find_length (g)
             new_gen.append (g)
         gen_now = new_gen
 
-    best_path = float ("inf")
+    best_length = float ("inf")
+    best_path = None
     for path in gen_now:
         l = find_length (path)
-        if l < best_path:
-            best_path = l
-    print (best_path)
+        if l < best_length:
+            best_length = l
+            best_path = path
+    print ("My Length: ", best_length)
     print ()
-    return gen_now
+    print ()
+    return best_path
 
 
 def solve (point_now, my_length, my_path, my_points_path, all_points):
@@ -194,10 +195,17 @@ for name in all_sets:
     best_path = [] #the answer for the order of points
     points = [] #all the points
     parser ("points.csv", name, best_length, best_path, points)
-    # a = random_gen (points, 100)
-    # b = cross_over (a)
-    # mutate (b)
-    a = genetic_solve (points, 100)
+    ans = genetic_solve (points, 200)
+
+
+    s = name + "\n"
+    for i in range (len (ans)):
+        p = ans[i]
+        if i == len (ans) - 1:
+            s += str (p.num)
+        else:
+            s += str (p.num) + ","
+    output.write (s + "\n\n")
 
     # my_path = [] # path of numbers
     # my_points_path = [] #path of point objects
