@@ -25,7 +25,7 @@ def parser (file, points_set, b_len, b_path, pnts):
         elements = lines[i].split (",")
         if elements[0] == points_set:
             b_len = elements[1]
-            print ("Best Length: ", b_len)
+            #print ("Best Length: ", b_len)
             x_cors = lines[i + 1].split (",")
             y_cors = lines[i + 2].split (",")
             answer_path = lines[i + 3].split (",")
@@ -36,7 +36,8 @@ def parser (file, points_set, b_len, b_path, pnts):
     o.close()
 
 def random_gen (points, num_lists): #produces a dictionary with num_lists items; key = distance || val = path
-    ans = {}
+    #ans = {}
+    ans = []
     for i in range (num_lists):
         adding = []
         nums = []
@@ -49,20 +50,20 @@ def random_gen (points, num_lists): #produces a dictionary with num_lists items;
                     dist += points[r].distance (adding[-1])
                 adding.append (points[r])
         dist += adding[-1].distance (adding[0])
-        #ans.append (adding)
-        ans[ 1 / dist] = adding
+        ans.append (adding)
+        #ans[ 1 / dist] = adding
     # print (ans)
     # print ()
     return ans
 
 def cross_over (lists): #creates one child
-    keys = list (lists.keys ())
+    #keys = list (lists.keys ())
     r1, r2  = 0, 0
     while r1 == r2: #makes sure they dont produce the same number
-        r1 = random.randint (0, len (keys) - 1)
-        r2 = random.randint (0, len (keys) - 1)
-    path1 = lists[keys[r1]]
-    path2 = lists[keys[r2]]
+        r1 = random.randint (0, len (lists) - 1)
+        r2 = random.randint (0, len (lists) - 1)
+    path1 = lists[r1]
+    path2 = lists[r2]
 
     new_points = [None for i in range (len (path1))] #path of point objects
     new_path = [None for i in range (len (path1))] #list of the points' numbers
@@ -110,19 +111,11 @@ def mutate (path):
         another = path[r2]
         path[r1] = another
         path[r2] = one
-
+        #print ("mutated!")
     # ans = []
     # for point in path:
     #     ans.append (point.num)
     # print (ans)
-    dist = 0
-    for i in range (len (path)):
-        if i == len (path) - 1:
-            dist += path[i].distance(path[0])
-        else:
-            dist += path[i].distance(path[i + 1])
-    #print ("My Length: ", dist, "\n\n\n")
-    #return path
 
 # def genetic_solve (points, num_generations):
 #     if num_generations == 0:
@@ -146,32 +139,32 @@ def mutate (path):
 def find_length (path):
     dist = 0
     for i in range (len(path)):
-        if i == len (points) - 1:
-            dist += points[i].distance (points[0])
+        if i == len (path) - 1:
+            dist += path[i].distance (path[0])
         else:
-            dist += points[i].distance (points[i + 1])
+            dist += path[i].distance (path[i + 1])
     return dist
 
 def genetic_solve (points, num_generation):
-    gen_now = random_gen (points, 100)
+    gen_now = random_gen (points, 100) #makes 100 different random paths
     for i in range (num_generation):
-        fittest = []
-        for j in range (len (gen_now)):
-            g = cross_over (gen_now)
+        new_gen = []
+        for j in range (len (gen_now)): #makes a new generation
+            g = cross_over (gen_now) #makes one child
             mutate (g)
-            if find_length (g) < (1/70):
-                fittest.append (g)
-        gen_now = fittest
+            score = 1 / find_length (g)
+            new_gen.append (g)
+        gen_now = new_gen
 
-    best_len = float ('inf')
-    best_path = None
+    best_path = float ("inf")
     for path in gen_now:
         l = find_length (path)
-        if l < best_len:
-            best_len = l
-            best_path = path
-    print (best_len)
-    return best_path
+        if l < best_path:
+            best_path = l
+    print (best_path)
+    print ()
+    return gen_now
+
 
 def solve (point_now, my_length, my_path, my_points_path, all_points):
     if len (my_path) == len (all_points):
@@ -204,7 +197,7 @@ for name in all_sets:
     # a = random_gen (points, 100)
     # b = cross_over (a)
     # mutate (b)
-    a = genetic_solve (points, 2)
+    a = genetic_solve (points, 100)
 
     # my_path = [] # path of numbers
     # my_points_path = [] #path of point objects
