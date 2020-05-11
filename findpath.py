@@ -124,25 +124,54 @@ def mutate (path):
     #print ("My Length: ", dist, "\n\n\n")
     #return path
 
-def genetic_solve (points, num_generations):
-    if num_generations == 0:
-        dist = 0
-        for i in range (len (points)):
-            if i == len (points) - 1:
-                dist += points[i].distance(points[0])
-            else:
-                dist += points[i].distance(points[i + 1])
-        dist += points[-1].distance (points[0])
-        # print (dist)
-        return points
-    else:
-        parent_gen = random_gen (points, 100)
-        new_gen = [] #a list of paths with all the children
-        for i in range (100):
-            g = cross_over (parent_gen)
+# def genetic_solve (points, num_generations):
+#     if num_generations == 0:
+#         dist = 0
+#         for i in range (len (points)):
+#             if i == len (points) - 1:
+#                 dist += points[i].distance(points[0])
+#             else:
+#                 dist += points[i].distance(points[i + 1])
+#         dist += points[-1].distance (points[0])
+#         # print (dist)
+#         return points
+#     else:
+#         parent_gen = random_gen (points, 100)
+#         new_gen = [] #a list of paths with all the children
+#         for i in range (100):
+#             g = cross_over (parent_gen)
+#             mutate (g)
+#             new_gen.append (g)
+#             genetic_solve (g, num_generations - 1)
+def find_length (path):
+    dist = 0
+    for i in range (len(path)):
+        if i == len (points) - 1:
+            dist += points[i].distance (points[0])
+        else:
+            dist += points[i].distance (points[i + 1])
+    return dist
+
+def genetic_solve (points, num_generation):
+    gen_now = random_gen (points, 100)
+    for i in range (num_generation):
+        fittest = []
+        for j in range (len (gen_now)):
+            g = cross_over (gen_now)
             mutate (g)
-            new_gen.append (g)
-            genetic_solve (g, num_generations - 1)
+            if find_length (g) < (1/70):
+                fittest.append (g)
+        gen_now = fittest
+
+    best_len = float ('inf')
+    best_path = None
+    for path in gen_now:
+        l = find_length (path)
+        if l < best_len:
+            best_len = l
+            best_path = path
+    print (best_len)
+    return best_path
 
 def solve (point_now, my_length, my_path, my_points_path, all_points):
     if len (my_path) == len (all_points):
