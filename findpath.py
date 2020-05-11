@@ -50,12 +50,12 @@ def random_gen (points, num_lists): #produces a dictionary with num_lists items;
                 adding.append (points[r])
         dist += adding[-1].distance (adding[0])
         #ans.append (adding)
-        ans[dist] = adding
+        ans[ 1 / dist] = adding
     # print (ans)
     # print ()
     return ans
 
-def cross_over (lists):
+def cross_over (lists): #creates one child
     keys = list (lists.keys ())
     r1, r2  = 0, 0
     while r1 == r2: #makes sure they dont produce the same number
@@ -121,8 +121,28 @@ def mutate (path):
             dist += path[i].distance(path[0])
         else:
             dist += path[i].distance(path[i + 1])
-    print ("My Length: ", dist, "\n\n\n")
-    return path
+    #print ("My Length: ", dist, "\n\n\n")
+    #return path
+
+def genetic_solve (points, num_generations):
+    if num_generations == 0:
+        dist = 0
+        for i in range (len (points)):
+            if i == len (points) - 1:
+                dist += points[i].distance(points[0])
+            else:
+                dist += points[i].distance(points[i + 1])
+        dist += points[-1].distance (points[0])
+        # print (dist)
+        return points
+    else:
+        parent_gen = random_gen (points, 100)
+        new_gen = [] #a list of paths with all the children
+        for i in range (100):
+            g = cross_over (parent_gen)
+            mutate (g)
+            new_gen.append (g)
+            genetic_solve (g, num_generations - 1)
 
 def solve (point_now, my_length, my_path, my_points_path, all_points):
     if len (my_path) == len (all_points):
@@ -152,9 +172,11 @@ for name in all_sets:
     best_path = [] #the answer for the order of points
     points = [] #all the points
     parser ("points.csv", name, best_length, best_path, points)
-    a = random_gen (points, 100)
-    b = cross_over (a)
-    mutate (b)
+    # a = random_gen (points, 100)
+    # b = cross_over (a)
+    # mutate (b)
+    a = genetic_solve (points, 2)
+
     # my_path = [] # path of numbers
     # my_points_path = [] #path of point objects
     # my_length = 0
