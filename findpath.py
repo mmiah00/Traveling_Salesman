@@ -1,6 +1,5 @@
 import copy
 import random
-set_name = ""
 
 class point:
     def __init__ (self, num, x, y):
@@ -168,7 +167,7 @@ def solve (point_now, my_path, my_points_path, all_points):
             my_path.append (my_points_path[0].num)
 
 all_sets = ["A4", "A8", "A9", "A9-2", "A10", "A11", "A12", "A12-2", "A13", "A13-2", "A30", "A50"]
-output = open ("out.txt", "w")
+output = open ("paths.txt", "w")
 for name in all_sets:
     best_length = 0 #the answer for the shortest length
     best_path = [] #the answer for the order of points
